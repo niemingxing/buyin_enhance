@@ -1,0 +1,54 @@
+{
+	"manifest_version": 3,
+	"name": "巨量百应辅助插件",
+	"version": "1.0",
+	"description": "巨量百应辅助插件，更多数据操作方式。",
+	"author": "niemingxing",
+	"icons":
+	{
+		"16":"icon16.png",
+		"48":"icon48.png",
+		"128":"icon128.png"
+	},
+	"action":
+	{
+		"default_icon": "icon16.png",
+		"default_popup": "popup.html"
+	},
+	"options_page": "options.html",
+	"background":
+	{
+		"service_worker": "js/background.js"
+	},
+	"host_permissions": [
+		"https://buyin.jinritemai.com/*",
+		"https://api.kaipm.com/*"
+	],
+	"content_scripts": 
+	[
+		{
+			"matches": ["https://buyin.jinritemai.com/*"],
+			"js": ["js/content-script.js"],
+			"css": [
+				"css/page_layer.css"
+			]
+		}
+	],
+	"web_accessible_resources":
+	[
+		{
+			"resources" : ["css/page_layer.css"],
+			"matches": [
+				"*://buyin.jinritemai.com/*"
+			]
+		}
+	],
+	"permissions": [
+		"storage",
+		"activeTab",
+		"tabs",
+		"scripting",
+		"clipboardRead",
+		"clipboardWrite"
+	]
+}
