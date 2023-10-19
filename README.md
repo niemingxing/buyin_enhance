@@ -8,7 +8,7 @@
 
 ![image](https://github.com/niemingxing/buyin_enhance/assets/7400829/58263bc2-106b-4550-9a94-33c9836f6fcc)
 
-![image](https://github.com/niemingxing/buyin_enhance/assets/7400829/f9212cbd-3bb5-45b4-824c-884b92632afe)
+![image](https://github.com/niemingxing/buyin_enhance/assets/7400829/26d0849f-b80d-443b-9ea1-96fbc9a6379f)
 
 ### 交流方式：
 
