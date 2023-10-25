@@ -378,12 +378,13 @@ function initExampleDarenButton(elementsWithPrefix)
 	});
 }
 
-function checkDarenProfile(elementsWithPrefix)
+function checkDarenProfile()
 {
-	let intervalId = setInterval(function (){
+	setInterval(function (){
 		let classPrefix = "index-module__listBlock";
 		let elementsWithPrefix = document.querySelectorAll('[class^="' + classPrefix + '"]');
 		let pageType = getPageType();
+		console.log(pageType);
 		if(pageType == "dashboard-example-daren")
 		{
 			if(userItemList.length == 0)
@@ -418,11 +419,7 @@ function initSetting(callback)
 // 在页面加载完成后插入弹层和引入CSS文件
 window.onload = function() {
 	currentUrl = window.location.href;
-	if(currentUrl.includes("buyin.jinritemai.com/dashboard/example-daren"))
-	{
-		checkDarenProfile();
-	}
-	else if(currentUrl.includes("buyin.jinritemai.com/dashboard/servicehall/daren-profile"))
+	if(currentUrl.includes("buyin.jinritemai.com/dashboard/servicehall/daren-profile"))
 	{
 		initSetting(function (){
 			initPromptMessagePopup();
@@ -430,6 +427,10 @@ window.onload = function() {
 			addStylesheet("css/page_layer.css");
 			initDarenProfile();
 		});
+	}
+	else if(currentUrl.includes("buyin.jinritemai.com/dashboard"))
+	{
+		checkDarenProfile();
 	}
 };
 /**
