@@ -419,31 +419,65 @@ function checkVideoPlayer()
 		{
 			const nameContainer = document.querySelector('div[class^=index-module__nameContainer]');
 			const downloadButton = nameContainer.querySelector('div[type=download]');
-			if(nameContainer && !downloadButton)
+			const copyButton = nameContainer.querySelector('div[type=copy]');
+			if(nameContainer)
 			{
-				const divElement = document.createElement("div");
-				divElement.setAttribute("elementtiming", "element-timing");
-				divElement.setAttribute("type", "download");
-				const aElement = document.createElement("a");
-				aElement.setAttribute("href", "javascript:;");
-				aElement.textContent = "下载";
-				// 设置样式属性
-				aElement.style.color = "gray";
-				aElement.style.fontSize = "12px";
-				aElement.style.marginLeft = "5px";
-				// 添加点击事件监听器
-				aElement.addEventListener("click", function(event) {
-					let video = videoPlayer.querySelector("video");
-					// 生成介于 100,000,000 和 999,999,999 之间的随机整数
-					const min = 100000000;
-					const max = 999999999;
-					const videoFilename = Math.floor(Math.random() * (max - min + 1)) + min +".mp4";
-					console.log(video.getAttribute("src"));
-					downloadStreamVideo(video.getAttribute("src"), videoFilename);
-					event.preventDefault(); // 阻止默认行为（例如跳转到 href 链接）
-				});
-				divElement.appendChild(aElement);
-				nameContainer.appendChild(divElement);
+				if(!downloadButton)
+				{
+					const downloadElement = document.createElement("div");
+					downloadElement.setAttribute("elementtiming", "element-timing");
+					downloadElement.setAttribute("type", "download");
+					const aElement = document.createElement("a");
+					aElement.setAttribute("href", "javascript:;");
+					aElement.textContent = "下载";
+					// 设置样式属性
+					aElement.style.color = "gray";
+					aElement.style.fontSize = "12px";
+					aElement.style.marginLeft = "5px";
+					// 添加点击事件监听器
+					aElement.addEventListener("click", function(event) {
+						let video = videoPlayer.querySelector("video");
+						// 生成介于 100,000,000 和 999,999,999 之间的随机整数
+						const min = 100000000;
+						const max = 999999999;
+						const videoFilename = Math.floor(Math.random() * (max - min + 1)) + min +".mp4";
+						console.log(video.getAttribute("src"));
+						downloadStreamVideo(video.getAttribute("src"), videoFilename);
+						event.preventDefault(); // 阻止默认行为（例如跳转到 href 链接）
+					});
+					downloadElement.appendChild(aElement);
+					nameContainer.appendChild(downloadElement);
+				}
+
+				if(!copyButton)
+				{
+					const copyElement = document.createElement("div");
+					copyElement.setAttribute("elementtiming", "element-timing");
+					copyElement.setAttribute("type", "copy");
+					const acElement = document.createElement("a");
+					acElement.setAttribute("href", "javascript:;");
+					acElement.textContent = "复制";
+					// 设置样式属性
+					acElement.style.color = "gray";
+					acElement.style.fontSize = "12px";
+					acElement.style.marginLeft = "5px";
+					// 添加点击事件监听器
+					acElement.addEventListener("click", function(event) {
+						let video = videoPlayer.querySelector("video");
+						let videoUrl = video.getAttribute("src");
+						// 使用Clipboard API将文本复制到剪切板
+						navigator.clipboard.writeText(videoUrl)
+							.then(function() {
+								showPromptMessagePopup("复制成功!",2);
+							})
+							.catch(function(err) {
+								showPromptMessagePopup("复制失败!",2);
+							});
+						event.preventDefault(); // 阻止默认行为（例如跳转到 href 链接）
+					});
+					copyElement.appendChild(acElement);
+					nameContainer.appendChild(copyElement);
+				}
 			}
 
 			console.log(videoPlayer);
