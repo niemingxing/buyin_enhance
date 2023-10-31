@@ -409,6 +409,119 @@ function checkDarenProfile()
 		}
 	},3000);
 }
+
+function checkVideoPlayer()
+{
+	setInterval(function (){
+		// 通过类名选择器选择具有指定前缀的元素
+		const videoPlayer = document.querySelector('div[class^="index-module__videoPlayer"]');
+		if(videoPlayer)
+		{
+			const nameContainer = document.querySelector('div[class^=index-module__nameContainer]');
+			const downloadButton = nameContainer.querySelector('div[type=download]');
+			if(nameContainer && !downloadButton)
+			{
+				const divElement = document.createElement("div");
+				divElement.setAttribute("elementtiming", "element-timing");
+				divElement.setAttribute("type", "download");
+				const aElement = document.createElement("a");
+				aElement.setAttribute("href", "javascript:;");
+				aElement.textContent = "下载";
+				// 设置样式属性
+				aElement.style.color = "gray";
+				aElement.style.fontSize = "12px";
+				aElement.style.marginLeft = "5px";
+				// 添加点击事件监听器
+				aElement.addEventListener("click", function(event) {
+					let video = videoPlayer.querySelector("video");
+					// 生成介于 100,000,000 和 999,999,999 之间的随机整数
+					const min = 100000000;
+					const max = 999999999;
+					const videoFilename = Math.floor(Math.random() * (max - min + 1)) + min +".mp4";
+					console.log(video.getAttribute("src"));
+					downloadStreamVideo(video.getAttribute("src"), videoFilename);
+					event.preventDefault(); // 阻止默认行为（例如跳转到 href 链接）
+				});
+				divElement.appendChild(aElement);
+				nameContainer.appendChild(divElement);
+			}
+
+			console.log(videoPlayer);
+		}
+		else
+		{
+			console.log("没有检测到视频播放");
+		}
+
+
+	},2000);
+}
+
+function showLoadingProgressBar()
+{
+	let loadingProgressBar = document.querySelector("div.custom-loading-progress-bar");
+	if(!loadingProgressBar)
+	{
+		let html = "<div class=\"custom-progress\"></div>";
+		loadingProgressBar = document.createElement("div");
+		loadingProgressBar.classList.add("custom-loading-progress-bar");
+		loadingProgressBar.innerHTML = html;
+		document.body.appendChild(loadingProgressBar);
+	}
+	loadingProgressBar.style.display = 'block';
+}
+
+function closeLoadingProgressBar()
+{
+	let loadingProgressBar = document.querySelector("div.custom-loading-progress-bar");
+	if(loadingProgressBar)
+	{
+		loadingProgressBar.style.display = 'none';
+	}
+}
+
+function downloadStreamVideo(url, fileName) {
+	console.log("stream download!");
+	showLoadingProgressBar();
+	fetch(url)
+		.then(response => {
+			const fileStream = response.body;
+			const reader = fileStream.getReader();
+
+			return new ReadableStream({
+				start(controller) {
+					function read() {
+						reader.read().then(({ done, value }) => {
+							if (done) {
+								controller.close();
+								return;
+							}
+							controller.enqueue(value);
+							read();
+						});
+					}
+					read();
+				}
+			});
+		})
+		.then(stream => new Response(stream))
+		.then(response => response.blob())
+		.then(blob => {
+			// 创建下载链接并触发下载
+			const link = document.createElement("a");
+			link.href = URL.createObjectURL(blob);
+			link.download = fileName;
+			link.click();
+			URL.revokeObjectURL(link.href);
+			closeLoadingProgressBar();
+		})
+		.catch(error => {
+			closeLoadingProgressBar();
+			showPromptMessagePopup("视频下载异常，请重新点击下载！");
+			console.error("Error downloading the file:", error);
+		});
+}
+
 function initSetting(callback)
 {
 	// 获取存储的值
@@ -427,6 +540,18 @@ window.onload = function() {
 			addStylesheet("css/page_layer.css");
 			initDarenProfile();
 		});
+	}
+	else if(currentUrl.includes("buyin.jinritemai.com/dashboard/inspiration-center/hot-video"))
+	{
+		initPromptMessagePopup();
+		addStylesheet("css/page_layer.css");
+		checkVideoPlayer();
+	}
+	else if(currentUrl.includes("buyin.jinritemai.com/dashboard/inspiration-center/hot-topic"))
+	{
+		initPromptMessagePopup();
+		addStylesheet("css/page_layer.css");
+		checkVideoPlayer();
 	}
 	else if(currentUrl.includes("buyin.jinritemai.com/dashboard"))
 	{
