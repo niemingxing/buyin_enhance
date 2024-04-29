@@ -347,6 +347,10 @@ function getPageType()
 	{
 		pageType = "dashboard-servicehall-daren-profile";
 	}
+	else if(currentUrl.includes("https://buyin.jinritemai.com/dashboard/followed-daren"))
+	{
+		pageType = "followed-daren";
+	}
 	console.log(pageType);
 	return pageType;
 }
@@ -389,22 +393,49 @@ function checkDarenProfile()
 		{
 			if(userItemList.length == 0)
 			{
-				let xhr = new XMLHttpRequest();
-				xhr.open('GET', 'https://buyin.jinritemai.com/api/anchor/follow/get?page=1&page_size=10&show_mode=1', true);
-				xhr.onreadystatechange = function() {
-					if (xhr.readyState === 4 && xhr.status === 200) {
-						let responseData = JSON.parse(xhr.responseText);
-						console.log("二次请求结果：");
-						userItemList = responseData.data.user_item_list;
-						console.log(userItemList);
-						initExampleDarenButton(elementsWithPrefix);
-					}
-				};
-				xhr.send();
+				// let xhr = new XMLHttpRequest();
+				// xhr.open('GET', 'https://buyin.jinritemai.com/api/anchor/follow/get?page=1&page_size=10&show_mode=1', true);
+				// xhr.onreadystatechange = function() {
+				// 	if (xhr.readyState === 4 && xhr.status === 200) {
+				// 		let responseData = JSON.parse(xhr.responseText);
+				// 		console.log("二次请求结果：");
+				// 		userItemList = responseData.data.user_item_list;
+				// 		console.log(userItemList);
+				// 		initExampleDarenButton(elementsWithPrefix);
+				// 	}
+				// };
+				// xhr.send();
 			}
 			else
 			{
 				initExampleDarenButton(elementsWithPrefix);
+			}
+		}
+		else if(pageType == "followed-daren")
+		{
+			var dhTongjiId = 'dh_tongji_btn';
+			// 检查是否存在指定id的元素
+			if (!document.getElementById(dhTongjiId)) {
+				// 获取第一个包含指定类名的元素
+				var element = document.querySelector('[class*="index-module__follow-button"]');
+
+				// 如果找到了匹配的元素，就添加新的 DOM 结构
+				if (element) {
+					var urlParams = new URLSearchParams(window.location.href);
+					// 获取 uid 参数的值
+					var uid = urlParams.get('uid');
+					var newElement = document.createElement('a');
+					newElement.id = dhTongjiId;
+					newElement.target = '_blank';
+					newElement.className = 'auxo-btn auxo-btn-primary';
+					newElement.setAttribute('elementtiming', 'element-timing');
+					newElement.style.width = '216px';
+					newElement.style.marginTop = '5px';
+					newElement.style.backgroundColor = '#169d47';
+					newElement.setAttribute('href', darenProfileUrl.replace("{uid}",uid));
+					newElement.innerHTML = '<span elementtiming="element-timing"> 带货统计</span>';
+					element.appendChild(newElement);
+				}
 			}
 		}
 	},3000);
