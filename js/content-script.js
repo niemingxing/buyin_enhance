@@ -3,6 +3,23 @@ let currentUrl = "";
 let userItemList = [];
 let darenProfileUrl = "https://buyin.jinritemai.com/dashboard/servicehall/daren-profile?uid={uid}&previous_page_name=14&previous_page_type=11";
 let downloadDataNums = 0;
+const head = document.head;
+const proxyScript = createScript(chrome.runtime.getURL("js/inject.js"))
+
+if(head.firstChild) {
+	// proxyScript 要保证在第一个插入
+	head.insertBefore(proxyScript, head.firstChild);
+} else {
+	head.appendChild(proxyScript);
+}
+
+function createScript(src) {
+    const script = document.createElement('script');
+    script.setAttribute('src', src);
+    return script;
+}
+
+
 /**
  * 初始化弹层
  */
@@ -382,6 +399,18 @@ function initExampleDarenButton(elementsWithPrefix)
 	});
 }
 
+window.addEventListener('ajaxGetData', function(e) {
+	const data = e?.detail;
+	if(!data) return;
+	const responseURL = data?.responseURL;
+	if(responseURL){
+		if(responseURL.indexOf('api/anchor/follow/get') !== -1) {
+			userItemList = JSON.parse(data?.response).data.user_item_list;
+			console.log(data?.response);
+		}
+	}
+})
+
 function checkDarenProfile()
 {
 	setInterval(function (){
@@ -391,23 +420,9 @@ function checkDarenProfile()
 		console.log(pageType);
 		if(pageType == "dashboard-example-daren")
 		{
-			if(userItemList.length == 0)
+			if(userItemList.length != 0)
 			{
-				// let xhr = new XMLHttpRequest();
-				// xhr.open('GET', 'https://buyin.jinritemai.com/api/anchor/follow/get?page=1&page_size=10&show_mode=1', true);
-				// xhr.onreadystatechange = function() {
-				// 	if (xhr.readyState === 4 && xhr.status === 200) {
-				// 		let responseData = JSON.parse(xhr.responseText);
-				// 		console.log("二次请求结果：");
-				// 		userItemList = responseData.data.user_item_list;
-				// 		console.log(userItemList);
-				// 		initExampleDarenButton(elementsWithPrefix);
-				// 	}
-				// };
-				// xhr.send();
-			}
-			else
-			{
+				console.log(userItemList);
 				initExampleDarenButton(elementsWithPrefix);
 			}
 		}
