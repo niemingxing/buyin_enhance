@@ -389,8 +389,6 @@ function initExampleDarenButton(elementsWithPrefix)
 			newLink.onclick = function(event) {
 				event.stopPropagation();
 			};
-			newLink.className = "index-module__delete___zOxU1";
-			newLink.setAttribute("elementtiming", "element-timing");
 			newLink.setAttribute("daren-profile", "userItemList[index]['user_id']");
 			newLink.textContent = "带货统计";
 			// 将新的 <a> 元素追加到当前元素
@@ -414,7 +412,7 @@ window.addEventListener('ajaxGetData', function(e) {
 function checkDarenProfile()
 {
 	setInterval(function (){
-		let classPrefix = "index-module__listBlock";
+		let classPrefix = "index_module__listBlock";
 		let elementsWithPrefix = document.querySelectorAll('[class^="' + classPrefix + '"]');
 		let pageType = getPageType();
 		console.log(pageType);
