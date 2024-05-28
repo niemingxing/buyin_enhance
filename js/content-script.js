@@ -430,7 +430,7 @@ function checkDarenProfile()
 			// 检查是否存在指定id的元素
 			if (!document.getElementById(dhTongjiId)) {
 				// 获取第一个包含指定类名的元素
-				var element = document.querySelector('[class*="index-module__follow-button"]');
+				var element = document.querySelector('[class*="index_module__follow-button"]');
 
 				// 如果找到了匹配的元素，就添加新的 DOM 结构
 				if (element) {
