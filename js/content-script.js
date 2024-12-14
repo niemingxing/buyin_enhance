@@ -458,10 +458,10 @@ function checkVideoPlayer()
 {
 	setInterval(function (){
 		// 通过类名选择器选择具有指定前缀的元素
-		const videoPlayer = document.querySelector('div[class^="index-module__videoPlayer"]');
+		const videoPlayer = document.querySelector('div[class^="index_module__videoPlayer"]');
 		if(videoPlayer)
 		{
-			const nameContainer = document.querySelector('div[class^=index-module__nameContainer]');
+			const nameContainer = document.querySelector('div[class^=index_module__nameContainer]');
 			const downloadButton = nameContainer.querySelector('div[type=download]');
 			const copyButton = nameContainer.querySelector('div[type=copy]');
 			if(nameContainer)
